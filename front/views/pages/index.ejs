@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+
+  <main>
+    <h1>This is great</h1>
+    <p>Welcome <%if (data.exists == true) { %>
+      <b><%=data.name%></b>
+      <% } %> to Hello!</p>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+</body>
+
+</html>
