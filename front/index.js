@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const axios = require('axios');
+require('dotenv').config()
+
 // ####################################################################################### //
 
 // User body-parser to access req.body
@@ -16,7 +18,7 @@ app.set('view engine', 'ejs');
 app.listen(8080);
 console.log('Server is listening on port 8080');
 // ####################################################################################### //
-
+const apiUrl = process.env.API_URL
 // Render index page '/'
 app.get('/', function(req, res) {
   res.render('pages/index', {
@@ -44,7 +46,7 @@ app.post('/login', function(req, res) {
   // Get form data
   const user = req.body
   // Send POST request to API 
-  axios.post('http://localhost:3000/login', {
+  axios.post(`${apiUrl}/login`, {
     email: user.email,
     password: user.password
   })
@@ -89,7 +91,7 @@ app.post('/signup', function(req, res) {
   // Get form data
   const _user = req.body
   // Send POST request to API 
-  axios.post('http://localhost:3000/signup', {
+  axios.post(`${apiUrl}/signup`, {
     name: _user.name,
     email: _user.email,
     password: _user.password

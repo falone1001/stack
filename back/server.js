@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser')
 const mongoose = require("mongoose")
 const User = require("./models")
+require('dotenv').config()
 
 // ####################################################################################### //
 
@@ -16,9 +17,11 @@ app.use(bodyParser.urlencoded({
 app.use(express.json());
 // ####################################################################################### //
 
+const mongoUri = process.env.MONGO_URI
+
 // MongoDB database setup
 mongoose
-  .connect("mongodb://root:root@127.0.0.1:27017/hello", { useNewUrlParser: true })
+  .connect(mongoUri, { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to Database')
   })
@@ -35,6 +38,7 @@ app.listen(3000, function () {
 
 // Dummy route. GET / Returns 'Hello'
 app.get('/', (req, res) => {
+  console.log('Hello')
   res.send('Hello')
 });
 // ####################################################################################### //

@@ -2,11 +2,51 @@ version: '3.1'
 
 services:
 
-  mongo:
-    image: mongo
+  back:
+    container_name: "back"
+    build:
+      context: ./back
+      dockerfile: Dockerfile
     restart: always
     ports:
-      - "127.0.0.1:27017:27017"
+      - "3000:3000"
+    depends_on: # Wait for 'mongo' container to start before starting 'back'
+      - mongo
+    env_file:
+      - ./back/.env
+    networks: 
+      - stack-net
+    
+  front:
+    # image: front
+    container_name: "front"
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./front/.env
+    networks: 
+      - stack-net
+
+  mongo:
+    image: mongo
+    container_name: "mongo"
+    restart: always
+    command: mongod --serviceExecutor adaptive
+    ports:
+      - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      - MONGO_INITDB_DATABASE=hello
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks: 
+      - stack-net
+
+networks:
+  stack-net:
+    external: true
